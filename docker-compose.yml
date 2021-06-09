@@ -1,20 +1,29 @@
 version: '3.3'
 
 services:
-  balanceservice:
-    container_name: balanceservice
-    build:
-      dockerfile: Dockerfile
-    ports:
-      - "8001:8001"`
-    environment:
-      BALANCESERVICE_SERVE_REST_ADDRESS: ":8001"
-      BALANCESERVICE_DB_USER: "postgres"
-      BALANCESERVICE_DB_PASS: "gv9y3ytsow"
-      BALANCESERVICE_DB_NAME: "balanceservice"
   balanceservicedatabase:
     image: "postgres"
     env_file:
       - ./balanceservice/database.env
     volumes:
       - ./balanceservice/database-data:/var/lib/postgresql/data/
+    ports:
+      - "5433:5432"
+  balanceservice:
+    container_name: balanceservice
+    build:
+      context: ./balanceservice
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    environment:
+      BALANCESERVICE_SERVE_REST_ADDRESS: ":8001"
+      BALANCESERVICE_DB_USER: "postgres"
+      BALANCESERVICE_DB_PASS: "gv9y3ytsow"
+      BALANCESERVICE_DB_HOST: "database"
+      BALANCESERVICE_DB_PORT: "5432"
+      BALANCESERVICE_DB_NAME: "balanceservice"
+    links:
+      - "balanceservicedatabase:database"
+    depends_on:
+      - balanceservicedatabase

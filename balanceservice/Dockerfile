@@ -1,16 +1,19 @@
-FROM debian:9-slim
+FROM alpine:latest
 
-RUN mkdir /app
+RUN apk add --no-cache git make musl-dev go
 
-WORKDIR /app
+# Configure Go
+ENV GOROOT /usr/lib/go
+ENV GOPATH /go
+ENV PATH /go/bin:$PATH
 
-RUN apt-get update
+RUN mkdir -p ${GOPATH}/src ${GOPATH}/bin
 
-# Install software
-RUN apt-get install -y git
-
+# Install Glide
 RUN git clone https://github.com/rustgainutdinov/text-to-speech-subscriptions-service
+
+WORKDIR ./text-to-speech-subscriptions-service
 
 RUN make build
 
-CMD ["/app/bin/balanceservice"]
+CMD ["./bin/balanceservice"]
