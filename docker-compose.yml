@@ -15,9 +15,9 @@ services:
       context: ./balanceservice
       dockerfile: Dockerfile
     ports:
-      - "8001:8001"
+      - "8001:8080"
     environment:
-      BALANCESERVICE_SERVE_REST_ADDRESS: ":8001"
+      BALANCESERVICE_SERVE_REST_ADDRESS: ":8080"
       BALANCESERVICE_DB_USER: "postgres"
       BALANCESERVICE_DB_PASS: "gv9y3ytsow"
       BALANCESERVICE_DB_HOST: "database"
@@ -27,3 +27,33 @@ services:
       - "balanceservicedatabase:database"
     depends_on:
       - balanceservicedatabase
+  translationservicedatabase:
+    image: "postgres"
+    env_file:
+      - ./translationservice/database.env
+    volumes:
+      - ./translationservice/database-data:/var/lib/postgresql/data/
+    ports:
+      - "5434:5432"
+  translationservice:
+    container_name: translationservice
+    build:
+      context: ./translationservice
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8080"
+    environment:
+      TRANSLATIONSERVICE_GRPC_ADDRESS: "127.0.0.1:8011"
+      TRANSLATIONSERVICE_HTTP_PROXY_ADDRESS: ":8080"
+      TRANSLATIONSERVICE_DB_USER: "postgres"
+      TRANSLATIONSERVICE_DB_PASS: "gv9y3ytsow"
+      TRANSLATIONSERVICE_DB_HOST: "database"
+      TRANSLATIONSERVICE_DB_PORT: "5432"
+      TRANSLATIONSERVICE_DB_NAME: "translationservice"
+      TRANSLATIONSERVICE_BALANCE_SERVICE_ADDRESS: "balanceservice:8080"
+    links:
+      - "translationservicedatabase:database"
+      - "balanceservice:balanceservice"
+    depends_on:
+      - translationservicedatabase
+      - balanceservice

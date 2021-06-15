@@ -8,10 +8,10 @@ ENV PATH /go/bin:$PATH
 
 RUN mkdir -p ${GOPATH}/src ${GOPATH}/bin
 
-RUN git clone https://github.com/rustgainutdinov/text-to-speech-subscriptions-service
+RUN git clone https://github.com/rustgainutdinov/text-to-speech-translation-service
 
-WORKDIR ./text-to-speech-subscriptions-service
+WORKDIR ./text-to-speech-translation-service
 
 RUN make build
 
-CMD ["./bin/balanceservice"]
+CMD ["./bin/translationservice"]
