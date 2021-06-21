@@ -1,6 +1,19 @@
 version: '3.3'
 
 services:
+  rabbitmq:
+    image: "rabbitmq:3.6-management"
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ./rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
+      - ./rabbitmq/rabbitmq.config:/etc/rabbitmq/rabbitmq.config:ro
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost ", "5672" ]
+      interval: 5s
+      timeout: 30s
+      retries: 10
   balanceservicedatabase:
     image: "postgres"
     env_file:
@@ -23,10 +36,20 @@ services:
       BALANCESERVICE_DB_HOST: "database"
       BALANCESERVICE_DB_PORT: "5432"
       BALANCESERVICE_DB_NAME: "balanceservice"
+      BALANCESERVICE_RABBITMQ_USER: "adminuser"
+      BALANCESERVICE_RABBITMQ_PASS: "password"
+      BALANCESERVICE_RABBITMQ_HOST: "rabbitmq:5672"
     links:
       - "balanceservicedatabase:database"
+      - "rabbitmq:rabbitmq"
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 10
     depends_on:
+      - rabbitmq
       - balanceservicedatabase
+
   translationservicedatabase:
     image: "postgres"
     env_file:
@@ -51,9 +74,14 @@ services:
       TRANSLATIONSERVICE_DB_PORT: "5432"
       TRANSLATIONSERVICE_DB_NAME: "translationservice"
       TRANSLATIONSERVICE_BALANCE_SERVICE_ADDRESS: "balanceservice:8080"
+      TRANSLATIONSERVICE_RABBITMQ_USER: "adminuser"
+      TRANSLATIONSERVICE_RABBITMQ_PASS: "password"
+      TRANSLATIONSERVICE_RABBITMQ_HOST: "rabbitmq:5672"
     links:
       - "translationservicedatabase:database"
       - "balanceservice:balanceservice"
+      - "rabbitmq:rabbitmq"
     depends_on:
       - translationservicedatabase
       - balanceservice
+      - rabbitmq
