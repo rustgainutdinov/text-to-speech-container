@@ -12,6 +12,8 @@ RUN git clone https://github.com/rustgainutdinov/text-to-speech-translation-serv
 
 WORKDIR ./text-to-speech-translation-service
 
+ADD ./googleConf/top-reef-315512-42fe3ca28b09.json .
+
 RUN make build
 
 CMD ["./bin/translationservice"]

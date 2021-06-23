@@ -14,6 +14,7 @@ services:
       interval: 5s
       timeout: 30s
       retries: 10
+
   balanceservicedatabase:
     image: "postgres"
     env_file:
@@ -22,6 +23,7 @@ services:
       - ./balanceservice/database-data:/var/lib/postgresql/data/
     ports:
       - "5433:5432"
+
   balanceservice:
     container_name: balanceservice
     build:
@@ -30,7 +32,8 @@ services:
     ports:
       - "8001:8080"
     environment:
-      BALANCESERVICE_SERVE_REST_ADDRESS: ":8080"
+      BALANCESERVICE_GRPC_ADDRESS: "127.0.0.1:8012"
+      BALANCESERVICE_HTTP_PROXY_ADDRESS: ":8080"
       BALANCESERVICE_DB_USER: "postgres"
       BALANCESERVICE_DB_PASS: "gv9y3ytsow"
       BALANCESERVICE_DB_HOST: "database"
@@ -58,6 +61,7 @@ services:
       - ./translationservice/database-data:/var/lib/postgresql/data/
     ports:
       - "5434:5432"
+
   translationservice:
     container_name: translationservice
     build:
@@ -85,3 +89,22 @@ services:
       - translationservicedatabase
       - balanceservice
       - rabbitmq
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 10
+
+  api_tests:
+    container_name: api_tests
+    build: ./apitests
+    image: postman_checks
+    command:
+      run tts.postman_collection.json
+      -e ./environments/tts.postman_environment.json
+      -r html,cli
+    volumes:
+      - ./apitests/src:/etc/newman
+    depends_on:
+      - balanceservice
+    links:
+      - "balanceservice:balanceservice"

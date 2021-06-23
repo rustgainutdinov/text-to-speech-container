@@ -1,0 +1,14 @@
+{
+  "id": "99d09aa6-efdb-42d2-86be-6c1591e252d6",
+  "values": [
+    {
+      "type": "any",
+      "value": "fe6cd2b6-a098-47f3-b155-8205a586f697",
+      "key": "currentBalanceUserID"
+    }
+  ],
+  "name": "globals",
+  "_postman_variable_scope": "globals",
+  "_postman_exported_at": "2021-06-23T11:18:10.205Z",
+  "_postman_exported_using": "Newman/5.2.3"
+}
