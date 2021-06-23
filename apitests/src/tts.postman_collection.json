@@ -255,7 +255,7 @@
 									"        method: 'POST',",
 									"        body: {",
 									"            mode: 'raw',",
-									"            raw: JSON.stringify({ userID: pm.environment.get(\"currentBalanceUserID\"), score: 1000 })",
+									"            raw: JSON.stringify({ userID: pm.environment.get(\"currentBalanceUserID\"), score: 100 })",
 									"        }",
 									"    }, function (err, res) {",
 									"        if (err != null) {",
@@ -287,7 +287,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"userID\": \"{{currentBalanceUserID}}\", \"text\": \"medved vodka balalayka\"}",
+							"raw": "{\"userID\": \"{{currentBalanceUserID}}\", \"text\": \"парам пам пам\"}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -373,6 +373,13 @@
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.sendRequest(pm.environment.get(\"balanceserviceHost\") + pm.environment.get(\"balanceServicePort\") + \"/api/v1/balance/canWriteOff?score=76&userID=\" + pm.environment.get(\"currentBalanceUserID\"), function (err, response) {",
+									"    let res = response.json();",
+									"    pm.test('It should be 76 scores on balance', function () {",
+									"        pm.expect(response.status).to.eql(\"OK\");",
+									"        pm.expect(res.result).to.eql(true);",
+									"    });",
 									"});"
 								],
 								"type": "text/javascript"
@@ -383,7 +390,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{translationserviceHost}}{{translationservicePort}}/api/v1/translation/data?translationID=fd3708a3-99d9-43c6-b6c8-b3bd651d5f42",
+							"raw": "{{translationserviceHost}}{{translationservicePort}}/api/v1/translation/data?translationID={{currentTranslationID}}",
 							"host": [
 								"{{translationserviceHost}}{{translationservicePort}}"
 							],
@@ -396,7 +403,7 @@
 							"query": [
 								{
 									"key": "translationID",
-									"value": "fd3708a3-99d9-43c6-b6c8-b3bd651d5f42"
+									"value": "{{currentTranslationID}}"
 								}
 							]
 						}
