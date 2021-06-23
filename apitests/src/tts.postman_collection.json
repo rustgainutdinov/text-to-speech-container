@@ -376,6 +376,7 @@
 									"});",
 									"pm.sendRequest(pm.environment.get(\"balanceserviceHost\") + pm.environment.get(\"balanceServicePort\") + \"/api/v1/balance/canWriteOff?score=76&userID=\" + pm.environment.get(\"currentBalanceUserID\"), function (err, response) {",
 									"    let res = response.json();",
+									"    console.log(res);",
 									"    pm.test('It should be 76 scores on balance', function () {",
 									"        pm.expect(response.status).to.eql(\"OK\");",
 									"        pm.expect(res.result).to.eql(true);",
@@ -390,7 +391,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{translationserviceHost}}{{translationservicePort}}/api/v1/translation/data?translationID={{currentTranslationID}}",
+							"raw": "{{translationserviceHost}}{{translationservicePort}}/api/v1/translation/data?translationID=fd3708a3-99d9-43c6-b6c8-b3bd651d5f42",
 							"host": [
 								"{{translationserviceHost}}{{translationservicePort}}"
 							],
@@ -403,7 +404,7 @@
 							"query": [
 								{
 									"key": "translationID",
-									"value": "{{currentTranslationID}}"
+									"value": "fd3708a3-99d9-43c6-b6c8-b3bd651d5f42"
 								}
 							]
 						}
