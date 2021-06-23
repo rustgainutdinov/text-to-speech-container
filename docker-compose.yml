@@ -81,6 +81,7 @@ services:
       TRANSLATIONSERVICE_RABBITMQ_USER: "adminuser"
       TRANSLATIONSERVICE_RABBITMQ_PASS: "password"
       TRANSLATIONSERVICE_RABBITMQ_HOST: "rabbitmq:5672"
+      GOOGLE_APPLICATION_CREDENTIALS: "/text-to-speech-translation-service/top-reef-315512-42fe3ca28b09.json"
     links:
       - "translationservicedatabase:database"
       - "balanceservice:balanceservice"

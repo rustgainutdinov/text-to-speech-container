@@ -27,16 +27,16 @@
 							"script": {
 								"exec": [
 									"async function run() {",
-									"    await new Promise(done => setTimeout(() => done(), 10000));",
+									"\tawait new Promise(done => setTimeout(() => done(), 5000));",
 									"}",
 									"run();",
 									"function uuidv4() {",
 									"    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {",
-									"        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);",
-									"        return v.toString(16);",
+									"    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);",
+									"    return v.toString(16);",
 									"    });",
 									"}",
-									"pm.environment.set(\"currentBalanceUserID\", uuidv4())"
+									"pm.environment.set(\"currentBalanceUserID\", uuidv4());"
 								],
 								"type": "text/javascript"
 							}
@@ -47,7 +47,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"userID\":\"{{currentBalanceUserID}}\"}",
+							"raw": "{\n    \"userID\": \"{{currentBalanceUserID}}\",\n    \"score\": 1000\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -55,9 +55,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}{{balanceServicePort}}/api/v1/balance/create",
+							"raw": "{{balanceserviceHost}}{{balanceServicePort}}/api/v1/balance/create",
 							"host": [
-								"{{host}}{{balanceServicePort}}"
+								"{{balanceserviceHost}}{{balanceServicePort}}"
 							],
 							"path": [
 								"api",
@@ -79,18 +79,16 @@
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
 									"});",
-									"pm.sendRequest(pm.environment.get(\"host\") + pm.environment.get(\"balanceServicePort\") + \"/api/v1/balance/canWriteOff?score=100&userID=\" + pm.environment.get(\"currentBalanceUserID\"), function (err, response) {",
+									"pm.sendRequest(pm.environment.get(\"balanceserviceHost\") + pm.environment.get(\"balanceServicePort\") + \"/api/v1/balance/canWriteOff?score=1000&userID=\" + pm.environment.get(\"currentBalanceUserID\"), function (err, response) {",
 									"    let res = response.json();",
-									"    console.log(response.status);",
-									"    pm.test('It should be possible to write off 100 score', function () {",
+									"    pm.test('It should be possible to write off 1000 score', function () {",
 									"        pm.expect(response.status).to.eql(\"OK\");",
 									"        pm.expect(res.result).to.eql(true);",
 									"    });",
 									"});",
-									"pm.sendRequest(pm.environment.get(\"host\") + pm.environment.get(\"balanceServicePort\") + \"/api/v1/balance/canWriteOff?score=101&userID=\" + pm.environment.get(\"currentBalanceUserID\"), function (err, response) {",
+									"pm.sendRequest(pm.environment.get(\"balanceserviceHost\") + pm.environment.get(\"balanceServicePort\") + \"/api/v1/balance/canWriteOff?score=1001&userID=\" + pm.environment.get(\"currentBalanceUserID\"), function (err, response) {",
 									"    let res = response.json();",
-									"    console.log(response.status);",
-									"    pm.test('It should be impossible to write off 101 score', function () {",
+									"    pm.test('It should be impossible to write off 1001    score', function () {",
 									"        pm.expect(response.status).to.eql(\"OK\");",
 									"        pm.expect(res.result).to.eql(false);",
 									"    });",
@@ -105,7 +103,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"userID\": \"{{currentBalanceUserID}}\",\n    \"score\": 100\n}",
+							"raw": "{\n    \"userID\": \"{{currentBalanceUserID}}\",\n    \"score\": 1000\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -113,9 +111,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}{{balanceServicePort}}/api/v1/balance/topUp",
+							"raw": "{{balanceserviceHost}}{{balanceServicePort}}/api/v1/balance/topUp",
 							"host": [
-								"{{host}}{{balanceServicePort}}"
+								"{{balanceserviceHost}}{{balanceServicePort}}"
 							],
 							"path": [
 								"api",
@@ -137,18 +135,16 @@
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
 									"});",
-									"pm.sendRequest(pm.environment.get(\"host\") + pm.environment.get(\"balanceServicePort\") + \"/api/v1/balance/canWriteOff?score=29&userID=\" + pm.environment.get(\"currentBalanceUserID\"), function (err, response) {",
+									"pm.sendRequest(pm.environment.get(\"balanceserviceHost\") + pm.environment.get(\"balanceServicePort\") + \"/api/v1/balance/canWriteOff?score=929&userID=\" + pm.environment.get(\"currentBalanceUserID\"), function (err, response) {",
 									"    let res = response.json();",
-									"    console.log(response.status);",
-									"    pm.test('It should be possible to write off 29 score', function () {",
+									"    pm.test('It should be possible to write off 929 score', function () {",
 									"        pm.expect(response.status).to.eql(\"OK\");",
 									"        pm.expect(res.result).to.eql(true);",
 									"    });",
 									"});",
-									"pm.sendRequest(pm.environment.get(\"host\") + pm.environment.get(\"balanceServicePort\") + \"/api/v1/balance/canWriteOff?score=30&userID=\" + pm.environment.get(\"currentBalanceUserID\"), function (err, response) {",
+									"pm.sendRequest(pm.environment.get(\"balanceserviceHost\") + pm.environment.get(\"balanceServicePort\") + \"/api/v1/balance/canWriteOff?score=930&userID=\" + pm.environment.get(\"currentBalanceUserID\"), function (err, response) {",
 									"    let res = response.json();",
-									"    console.log(response.status);",
-									"    pm.test('It should be impossible to write off 30 score', function () {",
+									"    pm.test('It should be impossible to write off 930 score', function () {",
 									"        pm.expect(response.status).to.eql(\"OK\");",
 									"        pm.expect(res.result).to.eql(false);",
 									"    });",
@@ -171,9 +167,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}{{balanceServicePort}}/api/v1/balance/writeOff",
+							"raw": "{{balanceserviceHost}}{{balanceServicePort}}/api/v1/balance/writeOff",
 							"host": [
-								"{{host}}{{balanceServicePort}}"
+								"{{balanceserviceHost}}{{balanceServicePort}}"
 							],
 							"path": [
 								"api",
@@ -213,9 +209,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}{{balanceServicePort}}/api/v1/balance/remove",
+							"raw": "{{balanceserviceHost}}{{balanceServicePort}}/api/v1/balance/remove",
 							"host": [
-								"{{host}}{{balanceServicePort}}"
+								"{{balanceserviceHost}}{{balanceServicePort}}"
 							],
 							"path": [
 								"api",
@@ -226,31 +222,181 @@
 						}
 					},
 					"response": []
-				},
+				}
+			]
+		},
+		{
+			"name": "Translation service",
+			"item": [
 				{
-					"name": "CanWriteOff",
+					"name": "Translate",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"function uuidv4() {",
+									"    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {",
+									"    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);",
+									"    return v.toString(16);",
+									"    });",
+									"}",
+									"pm.environment.set(\"currentBalanceUserID\", uuidv4());",
+									"pm.sendRequest({",
+									"    url: pm.environment.get(\"balanceserviceHost\") + pm.environment.get(\"balanceServicePort\") +'/api/v1/balance/create',",
+									"    method: 'POST',",
+									"    body: {",
+									"        mode: 'raw',",
+									"        raw: JSON.stringify({ userID: pm.environment.get(\"currentBalanceUserID\") })",
+									"    }",
+									"}, function (err, res) {",
+									"    pm.sendRequest({",
+									"        url: pm.environment.get(\"balanceserviceHost\") + pm.environment.get(\"balanceServicePort\") +'/api/v1/balance/topUp',",
+									"        method: 'POST',",
+									"        body: {",
+									"            mode: 'raw',",
+									"            raw: JSON.stringify({ userID: pm.environment.get(\"currentBalanceUserID\"), score: 1000 })",
+									"        }",
+									"    }, function (err, res) {",
+									"        if (err != null) {",
+									"            console.log(err)",
+									"        }",
+									"});",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"let res = pm.response.json();",
+									"console.log(res.translationID);",
+									"pm.environment.set(\"currentTranslationID\", res.translationID);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"userID\": \"{{currentBalanceUserID}}\", \"text\": \"medved vodka balalayka\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{host}}{{balanceServicePort}}/api/v1/balance/canWriteOff?userID=e2d447b9-bff9-4d6b-b395-d363ac89c8d1&score=20",
+							"raw": "{{translationserviceHost}}{{translationservicePort}}/api/v1/translation/add",
 							"host": [
-								"{{host}}{{balanceServicePort}}"
+								"{{translationserviceHost}}{{translationservicePort}}"
 							],
 							"path": [
 								"api",
 								"v1",
-								"balance",
-								"canWriteOff"
+								"translation",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TranslationStatus",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"async function run() {",
+									"\tawait new Promise(done => setTimeout(() => done(), 5000));",
+									"}",
+									"run();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"let res = pm.response.json();",
+									"pm.test(\"Translation status must me SUCCESS\", function () {",
+									"    pm.expect(res.translationStatus).to.eql(\"SUCCESS\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{translationserviceHost}}{{translationservicePort}}/api/v1/translation/status?translationID={{currentTranslationID}}",
+							"host": [
+								"{{translationserviceHost}}{{translationservicePort}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"translation",
+								"status"
 							],
 							"query": [
 								{
-									"key": "userID",
-									"value": "e2d447b9-bff9-4d6b-b395-d363ac89c8d1"
-								},
+									"key": "translationID",
+									"value": "{{currentTranslationID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TranslationData",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{translationserviceHost}}{{translationservicePort}}/api/v1/translation/data?translationID=fd3708a3-99d9-43c6-b6c8-b3bd651d5f42",
+							"host": [
+								"{{translationserviceHost}}{{translationservicePort}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"translation",
+								"data"
+							],
+							"query": [
 								{
-									"key": "score",
-									"value": "20"
+									"key": "translationID",
+									"value": "fd3708a3-99d9-43c6-b6c8-b3bd651d5f42"
 								}
 							]
 						}
