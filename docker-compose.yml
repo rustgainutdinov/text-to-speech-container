@@ -21,6 +21,7 @@ services:
       - ./balanceservice/database.env
     volumes:
       - ./balanceservice/database-data:/var/lib/postgresql/data/
+      - ./balanceservice/data/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5433:5432"
 
@@ -59,6 +60,7 @@ services:
       - ./translationservice/database.env
     volumes:
       - ./translationservice/database-data:/var/lib/postgresql/data/
+      - ./translationservice/data/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5434:5432"
 
@@ -94,18 +96,3 @@ services:
       restart_policy:
         condition: on-failure
         max_attempts: 10
-
-  api_tests:
-    container_name: api_tests
-    build: ./apitests
-    image: postman_checks
-    command:
-      run tts.postman_collection.json
-      -e ./environments/tts.postman_environment.json
-      -r html,cli
-    volumes:
-      - ./apitests/src:/etc/newman
-    depends_on:
-      - balanceservice
-    links:
-      - "balanceservice:balanceservice"
