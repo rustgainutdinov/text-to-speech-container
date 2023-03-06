@@ -32,16 +32,13 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8001:8080"
+    env_file:
+      - ./balanceservice/variables.env
     environment:
       BALANCESERVICE_GRPC_ADDRESS: "127.0.0.1:8012"
       BALANCESERVICE_HTTP_PROXY_ADDRESS: ":8080"
-      BALANCESERVICE_DB_USER: "postgres"
-      BALANCESERVICE_DB_PASS: "gv9y3ytsow"
-      BALANCESERVICE_DB_HOST: "database"
       BALANCESERVICE_DB_PORT: "5432"
       BALANCESERVICE_DB_NAME: "balanceservice"
-      BALANCESERVICE_RABBITMQ_USER: "adminuser"
-      BALANCESERVICE_RABBITMQ_PASS: "password"
       BALANCESERVICE_RABBITMQ_HOST: "rabbitmq:5672"
     links:
       - "balanceservicedatabase:database"
@@ -71,17 +68,14 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8002:8080"
+    env_file:
+      - ./translationservice/variables.env
     environment:
       TRANSLATIONSERVICE_GRPC_ADDRESS: "127.0.0.1:8011"
       TRANSLATIONSERVICE_HTTP_PROXY_ADDRESS: ":8080"
-      TRANSLATIONSERVICE_DB_USER: "postgres"
-      TRANSLATIONSERVICE_DB_PASS: "gv9y3ytsow"
-      TRANSLATIONSERVICE_DB_HOST: "database"
       TRANSLATIONSERVICE_DB_PORT: "5432"
       TRANSLATIONSERVICE_DB_NAME: "translationservice"
       TRANSLATIONSERVICE_BALANCE_SERVICE_ADDRESS: "balanceservice:8080"
-      TRANSLATIONSERVICE_RABBITMQ_USER: "adminuser"
-      TRANSLATIONSERVICE_RABBITMQ_PASS: "password"
       TRANSLATIONSERVICE_RABBITMQ_HOST: "rabbitmq:5672"
       GOOGLE_APPLICATION_CREDENTIALS: "/text-to-speech-translation-service/top-reef-315512-42fe3ca28b09.json"
     links:
