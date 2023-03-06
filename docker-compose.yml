@@ -26,10 +26,8 @@ services:
       - "5433:5432"
 
   balanceservice:
+    image: "translationservice/balanceservice:v1"
     container_name: balanceservice
-    build:
-      context: ./balanceservice
-      dockerfile: Dockerfile
     ports:
       - "8001:8080"
     env_file:
@@ -62,10 +60,8 @@ services:
       - "5434:5432"
 
   translationservice:
+    image: "translationservice/translationservice:v1"
     container_name: translationservice
-    build:
-      context: ./translationservice
-      dockerfile: Dockerfile
     ports:
       - "8002:8080"
     env_file:
